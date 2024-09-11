@@ -19,7 +19,7 @@ namespace MVC_3PL
             }); //Allow Dependency Injection
 
             builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
-
+            builder.Services.AddScoped<IEmployeeReop, EmployeeRepo>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

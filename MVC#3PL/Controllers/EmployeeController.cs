@@ -1,29 +1,30 @@
 ﻿using BLL.Interfaces;
-using BLL.Repositories;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC_3PL.Controllers
 {
-    public class DepartmentController : Controller
+    public class EmployeeController : Controller
     {
-        private readonly IDepartmentRepo repo;
-        public DepartmentController(IDepartmentRepo DeptRepo)
+        private readonly IEmployeeReop repo;
+        public EmployeeController(IEmployeeReop EmpRepo)
         {
-            repo= DeptRepo;
+            repo = EmpRepo;
         }
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = repo.GetAll();
-            return View(departments);
+            var employees = repo.GetAll();
+            return View("Index", employees);
         }
         [HttpGet]
-        public IActionResult Create() { 
+        public IActionResult Create()
+        {
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Department model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Employee model)
         {
             if (ModelState.IsValid)
             {
@@ -37,15 +38,15 @@ namespace MVC_3PL.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Details(int? id,string viewName="Details") 
+        public IActionResult Details(int? id, string viewName = "Details")
         {
             if (id is null) return BadRequest();
-            var res =repo.Get(id.Value);
+            var res = repo.Get(id.Value);
             if (res == null)
             {
                 return NotFound();
             }
-            return View(viewName,res);
+            return View(viewName, res);
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -57,10 +58,10 @@ namespace MVC_3PL.Controllers
             //    return NotFound();
             //}
             //return View(res);
-            return Details(id,"Edit");
+            return Details(id, "Edit");
         }
         [HttpPost]
-        public IActionResult Edit(int id, Department model)
+        public IActionResult Edit(int id, Employee model)
         {
 
             if (ModelState.IsValid)
@@ -75,7 +76,8 @@ namespace MVC_3PL.Controllers
             return NotFound();
         }
         [HttpGet]
-        public IActionResult Delete(int? id) {
+        public IActionResult Delete(int? id)
+        {
 
             if (id is null) return BadRequest();
             var res = repo.Get(id.Value);
