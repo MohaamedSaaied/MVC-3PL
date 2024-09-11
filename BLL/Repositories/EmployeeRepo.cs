@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace BLL.Repositories
 {
-    public class DepartmentRepo :GenericRepo<Department>,IDepartmentRepo
+    public class EmployeeRepo: GenericRepo<Employee>, IEmployeeReop
     {
-        public DepartmentRepo(AppDBContext DB):base(DB)
-        { 
+        public EmployeeRepo(AppDBContext DB):base(DB)
+        {
         }
+
+
 
     }
 }
