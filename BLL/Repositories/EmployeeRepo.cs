@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using DAL.Data.Context;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace BLL.Repositories
         {
         }
 
-
-
+        public IEnumerable<Employee> GetByName(string name)
+        {
+           return DB.Employees.Where(E => E.Name.ToLower().Contains(name.ToLower())).Include(E=>E.WorkFor).ToList();
+        }
     }
 }

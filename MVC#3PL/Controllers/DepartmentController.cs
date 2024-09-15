@@ -7,15 +7,16 @@ namespace MVC_3PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepo repo;
-        public DepartmentController(IDepartmentRepo DeptRepo)
+        //private readonly IDepartmentRepo repo;
+        private readonly IUnitOfWork unitOfWork;
+        public DepartmentController(/*IDepartmentRepo DeptRepo*/IUnitOfWork unitOfWork)
         {
-            repo= DeptRepo;
+            this.unitOfWork = unitOfWork;
         }
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = repo.GetAll();
+            var departments = unitOfWork.DepartmentRepo.GetAll();
             return View(departments);
         }
         [HttpGet]
@@ -27,7 +28,7 @@ namespace MVC_3PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var res = repo.Add(model);
+                var res = unitOfWork.DepartmentRepo.Add(model);
                 if (res > 0)
                 {
                     return RedirectToAction("Index");
@@ -40,7 +41,7 @@ namespace MVC_3PL.Controllers
         public IActionResult Details(int? id,string viewName="Details") 
         {
             if (id is null) return BadRequest();
-            var res =repo.Get(id.Value);
+            var res = unitOfWork.DepartmentRepo.Get(id.Value);
             if (res == null)
             {
                 return NotFound();
@@ -65,7 +66,7 @@ namespace MVC_3PL.Controllers
 
             if (ModelState.IsValid)
             {
-                var res = repo.Update(model);
+                var res = unitOfWork.DepartmentRepo.Update(model);
                 if (res > 0)
                 {
                     return RedirectToAction("Index");
@@ -78,12 +79,12 @@ namespace MVC_3PL.Controllers
         public IActionResult Delete(int? id) {
 
             if (id is null) return BadRequest();
-            var res = repo.Get(id.Value);
+            var res = unitOfWork.DepartmentRepo.Get(id.Value);
             if (res == null)
             {
                 return NotFound();
             }
-            repo.Delete(res);
+            unitOfWork.DepartmentRepo.Delete(res);
             return RedirectToAction("Index");
         }
 
