@@ -12,7 +12,7 @@ namespace BLL.Repositories
     
     public class GenericRepo<T> : IGenericRepo<T> where T : BaseEntity
     {
-        private readonly AppDBContext DB;
+        private protected readonly AppDBContext DB;
         public GenericRepo(AppDBContext DB) { this.DB = DB; }
         public int Add(T entity)
         {

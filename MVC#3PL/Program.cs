@@ -1,7 +1,10 @@
+using BLL;
 using BLL.Interfaces;
 using BLL.Repositories;
 using DAL.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using MVC_3PL.Mapping;
+using MVC_3PL.Services;
 
 namespace MVC_3PL
 {
@@ -18,12 +21,34 @@ namespace MVC_3PL
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));
             }); //Allow Dependency Injection
 
-            builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
-            builder.Services.AddScoped<IEmployeeReop, EmployeeRepo>();
+            //builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
+            //builder.Services.AddScoped<IEmployeeReop, EmployeeRepo>();
+           builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+            
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+
+
+
+
+
+            //Life Time
+            //builder.Services.AddScoped();   //Life Time Per Request, Object unreachable
+            //builder.Services.AddTransient();//Life Time Per Operation
+            // builder.Services.AddSingleton();//Life Time Per Application
+
+
+            //builder.Services.AddScoped<IScopedService,ScopedService>();
+            //builder.Services.AddTransient<ITransientService,TransientService>();
+            //builder.Services.AddSingleton<IScopedService,ScopedService>();
+
+
+
+
+
+           var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

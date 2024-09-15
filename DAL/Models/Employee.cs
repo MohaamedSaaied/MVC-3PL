@@ -42,8 +42,8 @@ namespace DAL.Models
         public bool IsDeleted { get; set; }
         public DateTime HiringDate { get; set; }
         public DateTime DateOfCreation { get; set; }=DateTime.Now;
-        
-    
+        public int? WorkForId { get; set; } //FK
+        public Department? WorkFor { get; set; } //Nav prop
     
     }
 }
