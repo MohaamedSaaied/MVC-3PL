@@ -1,5 +1,7 @@
 ﻿using DAL.Data.Configration;
 using DAL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,9 @@ using System.Threading.Tasks;
 namespace DAL.Data.Context
 {
     
-    public class AppDBContext : DbContext
+
+
+    public class AppDBContext : IdentityDbContext<AppUser>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options):base(options)
         {
@@ -29,5 +33,7 @@ namespace DAL.Data.Context
         //}
         public DbSet <Department> Departments {get;set;}
         public DbSet<Employee> Employees { get; set; }
+        //public DbSet<IdentityUser> Users { get; set; }
+        //public DbSet<IdentityRole> Roles { get; set; }
     }
 }

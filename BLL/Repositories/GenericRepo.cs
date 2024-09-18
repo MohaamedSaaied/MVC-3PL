@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using DAL.Data.Context;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,32 +15,32 @@ namespace BLL.Repositories
     {
         private protected readonly AppDBContext DB;
         public GenericRepo(AppDBContext DB) { this.DB = DB; }
-        public int Add(T entity)
+        public async Task<int> AddAsync(T entity)
         {
-            DB.Add(entity);
-            return DB.SaveChanges();
+             DB.Add(entity);
+            return await DB.SaveChangesAsync();
         }
 
-        public int Delete(T entity)
+        public async Task<int> DeleteAsync(T entity)
         {
             DB.Remove(entity);
-            return DB.SaveChanges();    
+            return await DB.SaveChangesAsync();    
         }
 
-        public T Get(int id)
+        public async Task<T> GetAsync(int id)
         {
-            return DB.Set<T>().Find(id);
+            return await DB.Set<T>().FindAsync(id);
         }
-
-        public IEnumerable<T> GetAll()
+        //Async returns - Void - Task - Task<>
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return DB.Set<T>().ToList();
+            return await DB.Set<T>().ToListAsync();
         }
 
-        public int Update(T entity)
+        public async Task<int> UpdateAsync(T entity)
         {
             DB.Update(entity);
-            return DB.SaveChanges();
+            return await DB.SaveChangesAsync();
         }
     }
 }

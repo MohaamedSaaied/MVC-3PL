@@ -2,6 +2,8 @@ using BLL;
 using BLL.Interfaces;
 using BLL.Repositories;
 using DAL.Data.Context;
+using DAL.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC_3PL.Mapping;
 using MVC_3PL.Services;
@@ -23,9 +25,9 @@ namespace MVC_3PL
 
             //builder.Services.AddScoped<IDepartmentRepo,DepartmentRepo>();
             //builder.Services.AddScoped<IEmployeeReop, EmployeeRepo>();
-           builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-            
+            builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

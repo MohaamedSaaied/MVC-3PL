@@ -14,9 +14,9 @@ namespace MVC_3PL.Controllers
             this.unitOfWork = unitOfWork;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments = unitOfWork.DepartmentRepo.GetAll();
+            var departments =await unitOfWork.DepartmentRepo.GetAllAsync();
             return View(departments);
         }
         [HttpGet]
@@ -24,11 +24,11 @@ namespace MVC_3PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Department model)
+        public async Task<IActionResult> Create(Department model)
         {
             if (ModelState.IsValid)
             {
-                var res = unitOfWork.DepartmentRepo.Add(model);
+                var res =await unitOfWork.DepartmentRepo.AddAsync(model);
                 if (res > 0)
                 {
                     return RedirectToAction("Index");
@@ -38,10 +38,10 @@ namespace MVC_3PL.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Details(int? id,string viewName="Details") 
+        public async Task<IActionResult> Details(int? id,string viewName="Details") 
         {
             if (id is null) return BadRequest();
-            var res = unitOfWork.DepartmentRepo.Get(id.Value);
+            var res = await unitOfWork.DepartmentRepo.GetAsync(id.Value);
             if (res == null)
             {
                 return NotFound();
@@ -49,7 +49,7 @@ namespace MVC_3PL.Controllers
             return View(viewName,res);
         }
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             //if (id is null) return BadRequest();
             //var res = repo.Get(id.Value);
@@ -58,15 +58,15 @@ namespace MVC_3PL.Controllers
             //    return NotFound();
             //}
             //return View(res);
-            return Details(id,"Edit");
+            return await Details(id,"Edit");
         }
         [HttpPost]
-        public IActionResult Edit(int id, Department model)
+        public async Task<IActionResult> Edit(int id, Department model)
         {
 
             if (ModelState.IsValid)
             {
-                var res = unitOfWork.DepartmentRepo.Update(model);
+                var res =await unitOfWork.DepartmentRepo.UpdateAsync(model);
                 if (res > 0)
                 {
                     return RedirectToAction("Index");
@@ -76,15 +76,15 @@ namespace MVC_3PL.Controllers
             return NotFound();
         }
         [HttpGet]
-        public IActionResult Delete(int? id) {
+        public async Task<IActionResult> Delete(int? id) {
 
             if (id is null) return BadRequest();
-            var res = unitOfWork.DepartmentRepo.Get(id.Value);
+            var res = await unitOfWork.DepartmentRepo.GetAsync(id.Value);
             if (res == null)
             {
                 return NotFound();
             }
-            unitOfWork.DepartmentRepo.Delete(res);
+            await unitOfWork.DepartmentRepo.DeleteAsync(res);
             return RedirectToAction("Index");
         }
 

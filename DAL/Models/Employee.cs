@@ -11,8 +11,6 @@ namespace DAL.Models
     public class Employee:BaseEntity
     {
 
-
-
         [Required(ErrorMessage = "Name is Required")]
         public string Name { get; set; }
 
@@ -34,7 +32,7 @@ namespace DAL.Models
 
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-
+        public string? ImageName { get; set; }
 
         [Phone]
         public string Phone { get; set; }

@@ -19,6 +19,8 @@ namespace MVC_3PL.ViewModel
         public DateTime DateOfCreation { get; set; } = DateTime.Now;
         public int? WorkForId { get; set; } //FK
         public Department? WorkFor { get; set; } //Nav prop
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
 
     }
 }
