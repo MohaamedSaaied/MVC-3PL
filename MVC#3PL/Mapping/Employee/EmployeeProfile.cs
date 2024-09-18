@@ -9,6 +9,7 @@ namespace MVC_3PL.Mapping
         public EmployeeProfile()
         {
             CreateMap<EmployeeViewModel, Employee>().ReverseMap();
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using BLL.Interfaces;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using MVC_3PL.Helper;
 using MVC_3PL.ViewModel;
 using System.Collections.ObjectModel;
 
@@ -22,18 +23,18 @@ namespace MVC_3PL.Controllers
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-         
-        public IActionResult Index(string search)
+
+        public async Task<IActionResult> Index(string search)
         {
             var employees=Enumerable.Empty<Employee>();
             var EVM = new Collection<EmployeeViewModel>();
             if (string.IsNullOrEmpty(search))
             {
-                 employees = unitOfWork.EmployeeReop.GetAll();
+                 employees = await unitOfWork.EmployeeReop.GetAllAsync();
             }
             else
             {
-                employees= unitOfWork.EmployeeReop.GetByName(search);
+                employees= await unitOfWork.EmployeeReop.GetByNameAsync(search);
             }
             //Auto Mapping
             var res =mapper.Map<IEnumerable<EmployeeViewModel>>(employees);
@@ -50,18 +51,19 @@ namespace MVC_3PL.Controllers
             return View("Index", res);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var depts= unitOfWork.DepartmentRepo.GetAll();
+            var depts= await unitOfWork.DepartmentRepo.GetAllAsync();
             ViewData["Departments"] = depts;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel model)
+        public async Task<IActionResult> Create(EmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.ImageName = FilesSettings.UploadFile(model.Image, "images");
 
                 //Casting :EmployeeViewModel--->Employee
                 
@@ -84,7 +86,7 @@ namespace MVC_3PL.Controllers
                 //};
 
                 var employee=mapper.Map<Employee>(model);
-                var res = unitOfWork.EmployeeReop.Add(employee);
+                var res = await unitOfWork.EmployeeReop.AddAsync(employee);
                 if (res > 0)
                 {
                     TempData["Message"] = "Employee is Created Succesfully";
@@ -100,18 +102,23 @@ namespace MVC_3PL.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Details(int? id, string viewName = "Details")
+        public async Task<IActionResult> Details(int? id, string viewName = "Details")
         {
             if (id is null) return BadRequest();
-            var res = unitOfWork.EmployeeReop.Get(id.Value);
+            var res = await unitOfWork.EmployeeReop.GetAsync(id.Value);
+            
             if (res == null)
             {
                 return NotFound();
             }
+            if (viewName == "Edit") { 
+                var EVM = mapper.Map<EmployeeViewModel>(res);
+                return View(viewName, EVM);
+            }
             return View(viewName, res);
         }
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             //if (id is null) return BadRequest();
             //var res = repo.Get(id.Value);
@@ -120,16 +127,21 @@ namespace MVC_3PL.Controllers
             //    return NotFound();
             //}
             //return View(res);
-            var depts = unitOfWork.DepartmentRepo.GetAll();
+            var depts = await unitOfWork.DepartmentRepo.GetAllAsync();
             ViewData["Departments"] = depts;
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
         [HttpPost]
-        public IActionResult Edit(int id, Employee model)
+        public async Task<IActionResult> Edit(int id, EmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var res = unitOfWork.EmployeeReop.Update(model);
+                if(model.ImageName is not null) { 
+                   FilesSettings.DeleteFile(model.ImageName, "images");
+                }
+                model.ImageName= FilesSettings.UploadFile(model.Image, "images");
+                var employee = mapper.Map<Employee>(model);
+                var res = await unitOfWork.EmployeeReop.UpdateAsync(employee); 
                 if (res > 0)
                 {
                     return RedirectToAction("Index");
@@ -139,16 +151,17 @@ namespace MVC_3PL.Controllers
             return NotFound();
         }
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
 
             if (id is null) return BadRequest();
-            var res = unitOfWork.EmployeeReop.Get(id.Value);
+            var res = await unitOfWork.EmployeeReop.GetAsync(id.Value);
             if (res == null)
             {
                 return NotFound();
             }
-            unitOfWork.EmployeeReop.Delete(res);
+            FilesSettings.DeleteFile(res.ImageName, "images");
+            await unitOfWork.EmployeeReop.DeleteAsync(res);         
             return RedirectToAction("Index");
         }
 
