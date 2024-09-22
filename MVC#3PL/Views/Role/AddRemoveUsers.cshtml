@@ -1,0 +1,28 @@
+﻿@* @model List<UserRoleViewModel>
+@{
+    ViewData["Title"] = "Add&RemoveUsers";
+}
+
+
+<h1>Add & Remove Users</h1>
+
+<form asp-action="Add&RemoveUsers" asp-route-roleid="@Model.Rol">
+
+
+    <div class="form-group">
+        <label asp-for="@Model.UserNmae" class="col-form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <br />
+    <div><input type="button" value="Add & Remove Users" asp-action="AddRemoveUsers" asp-controller="Role" asp-route-id="@Model.Id" class="btn btn-outline-success" /></div>
+    <br />
+    <input type="submit" value="Save" class="btn btn-primary" />
+    <a asp-action="Index" class="btn btn-light">Back To List</a>
+</form>
+
+@section Validation {
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+ *@
