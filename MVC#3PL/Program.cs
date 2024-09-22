@@ -27,14 +27,9 @@ namespace MVC_3PL
             //builder.Services.AddScoped<IEmployeeReop, EmployeeRepo>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(EmployeeProfile));
-            builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>();
+            builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDBContext>().AddDefaultTokenProviders();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-
-
-
-
 
             //Life Time
             //builder.Services.AddScoped();   //Life Time Per Request, Object unreachable
