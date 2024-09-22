@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_3PL.Helper;
@@ -6,6 +7,7 @@ using MVC_3PL.ViewModel;
 
 namespace MVC_3PL.Controllers
 {
+   
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> userManager;
@@ -80,7 +82,7 @@ namespace MVC_3PL.Controllers
                 {
                     if (await userManager.CheckPasswordAsync(user, input.Password))
                     {
-                        var result = await signInManger.PasswordSignInAsync(user, input.Password, input.RememberMe, true);
+                        var result = await signInManger.PasswordSignInAsync(user, input.Password,input.RememberMe, false);
                         if (result.Succeeded)
                             return RedirectToAction("Index", "Home");
 

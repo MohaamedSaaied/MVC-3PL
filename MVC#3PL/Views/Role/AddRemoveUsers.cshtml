@@ -1,28 +1,39 @@
-﻿@* @model List<UserRoleViewModel>
+﻿@model List<UserRoleViewModel>
 @{
     ViewData["Title"] = "Add&RemoveUsers";
+    var RoleId = ViewData["RoleId"]as string;
 }
 
 
 <h1>Add & Remove Users</h1>
-
-<form asp-action="Add&RemoveUsers" asp-route-roleid="@Model.Rol">
-
-
-    <div class="form-group">
-        <label asp-for="@Model.UserNmae" class="col-form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <br />
-    <div><input type="button" value="Add & Remove Users" asp-action="AddRemoveUsers" asp-controller="Role" asp-route-id="@Model.Id" class="btn btn-outline-success" /></div>
-    <br />
-    <input type="submit" value="Save" class="btn btn-primary" />
-    <a asp-action="Index" class="btn btn-light">Back To List</a>
+<form asp-action="AddRemoveUsers" asp-route-roleId="@RoleId" method="post">
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Is Selected</th>
+        </tr>
+    </thead>
+    <tbody>
+    @for(int i =0; i < Model.Count; i++)
+    {
+            
+                    <tr>
+                        <div class="form-group">
+                        <td><label asp-for="@Model[i].IsSelected" class="form-control">@Model[i].UserName</label></td>
+                        <input type="hidden" asp-for="@Model[i].UserId"/>
+                        <input type="hidden" asp-for="@Model[i].UserName" />
+                        <td><input class="checkbox" asp-for="@Model[i].IsSelected" /></td>
+                        </div>
+                       
+                    </tr>
+    }
+            </tbody>
+        </table>
+    <input type="submit" value="Add Role" class="btn btn-outline-success">
+    <a asp-action="Edit" asp-route-id="@RoleId" class="btn btn-outline-danger">Back</a>
 </form>
-
 @section Validation {
     <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
- *@

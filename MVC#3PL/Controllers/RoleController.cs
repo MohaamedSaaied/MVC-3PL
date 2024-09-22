@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using MVC_3PL.ViewModel;
 
 namespace MVC_3PL.Controllers
 {
+    [Authorize]
     public class RoleController : Controller
     {
         public readonly RoleManager<IdentityRole> roleManager;
@@ -105,6 +107,8 @@ namespace MVC_3PL.Controllers
             await roleManager.DeleteAsync(res);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
         public async Task<IActionResult> AddRemoveUsers(string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
@@ -112,6 +116,7 @@ namespace MVC_3PL.Controllers
             {
                 return NotFound();
             }
+            ViewData["RoleId"]=roleId;
             var users= await userManager.Users.ToListAsync();
             var usersInRole = new List<UserRoleViewModel>();
             foreach(var user in users)
@@ -134,8 +139,39 @@ namespace MVC_3PL.Controllers
             return View(usersInRole);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddRemoveUsers(string roleId, List<UserRoleViewModel> users)
+        {
+            var role = await roleManager.FindByIdAsync(roleId);
+            if (role is null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid) 
+            {
+                foreach (var user in users) {
+                    var appUser = await userManager.FindByIdAsync(user.UserId);
+                    if(appUser is not null) { 
+                        if (user.IsSelected && await userManager.IsInRoleAsync(appUser,role.Name)) {
+                        
+                           await userManager.AddToRoleAsync(appUser,role.Name);
+                    
+                        }
+                    
+                        else if(!user.IsSelected && await userManager.IsInRoleAsync(appUser, role.Name))
+                    
+                        {
+                            await userManager.RemoveFromRoleAsync(appUser, role.Name);
+                        }
+                    }
+                }
+                return RedirectToAction(nameof(Edit),new {id=roleId});
+            }
 
+            return View(users);
+        }
+        
 
-    }
+        }
     
 }
