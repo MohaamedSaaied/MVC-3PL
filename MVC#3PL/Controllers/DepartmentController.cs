@@ -1,10 +1,12 @@
 ﻿using BLL.Interfaces;
 using BLL.Repositories;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC_3PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         //private readonly IDepartmentRepo repo;

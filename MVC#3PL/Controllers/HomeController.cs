@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC_3PL.Models;
 using MVC_3PL.Services;
@@ -6,6 +7,7 @@ using System.Text;
 
 namespace MVC_3PL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

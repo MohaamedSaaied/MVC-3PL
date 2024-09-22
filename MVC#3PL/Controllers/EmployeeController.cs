@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC_3PL.Helper;
 using MVC_3PL.ViewModel;
@@ -8,6 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace MVC_3PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         //private IDepartmentRepo DeptRepo;

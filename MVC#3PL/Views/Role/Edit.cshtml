@@ -14,8 +14,9 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <input type="hidden" name="roleId" value="@Model.Id" />
     <br />
-    <div><input type="button" value="Add & Remove Users" asp-action="AddRemoveUsers" asp-controller="Role" asp-route-id="@Model.Id" class="btn btn-outline-success" /></div>
+    <div><a asp-action="AddRemoveUsers" asp-route-roleid="@Model.Id" class="btn btn-outline-success">Add & Remove Users</a></div>
     <br />
     <input type="submit" value="Save" class="btn btn-primary" />
     <a asp-action="Index" class="btn btn-light">Back To List</a>

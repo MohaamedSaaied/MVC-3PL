@@ -2,6 +2,7 @@
 using BLL;
 using BLL.Interfaces;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MVC_3PL.ViewModel;
 
 namespace MVC_3PL.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         public readonly UserManager<AppUser> userManager;

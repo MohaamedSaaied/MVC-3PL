@@ -60,7 +60,10 @@ namespace MVC_3PL
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            
+
 
             app.MapControllerRoute(
                 name: "default",
